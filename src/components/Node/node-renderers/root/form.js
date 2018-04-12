@@ -1,3 +1,8 @@
+/**
+ * Form input for a root node.
+ * @since 4/10/18
+ */
+
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -38,7 +43,7 @@ export default class RootForm extends React.Component {
   /**
    * Renders this component.
    * @returns {React.Element} The rendered React element.
-   * @memberof Node
+   * @memberof RootForm
    */
   render() {
     return (

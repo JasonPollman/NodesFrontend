@@ -1,4 +1,10 @@
+/**
+ * Common functionality shared between node renderers.
+ * @since 4/10/18
+ */
+
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Tag,
@@ -17,6 +23,10 @@ export const FormPopover = ({ Form, ...props }) => (
     <Form {...props} />
   </Popover>
 );
+
+FormPopover.propTypes = {
+  Form: PropTypes.node.isRequired,
+};
 
 
 export default exports;

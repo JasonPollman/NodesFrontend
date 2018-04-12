@@ -1,3 +1,8 @@
+/**
+ * Form input for a factory node.
+ * @since 4/10/18
+ */
+
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -24,7 +29,12 @@ export default class FactoryForm extends React.Component {
     error: true,
   }
 
-  handleChange = (key, value) => {
+  /**
+   * Handles when a user changes one of the numeric inputs
+   * on the leaf node generation form.
+   * @memberof FactoryForm
+   */
+  handleNumericChangeForStateKey = (key, value) => {
     const { min, max, count } = { ...this.state, [key]: value };
     this.setState(state => ({ ...state, [key]: value }));
 
@@ -59,6 +69,10 @@ export default class FactoryForm extends React.Component {
     }));
   }
 
+  /**
+   * Handles the form submission of new lead nodes.
+   * @memberof FactoryForm
+   */
   handleSubmit = () => {
     this.props.onSubmit(this.state);
   }
@@ -66,7 +80,7 @@ export default class FactoryForm extends React.Component {
   /**
    * Renders this component.
    * @returns {React.Element} The rendered React element.
-   * @memberof Node
+   * @memberof FactoryForm
    */
   render() {
     return (
@@ -76,21 +90,21 @@ export default class FactoryForm extends React.Component {
           max={1000000}
           value={this.state.min}
           placeholder="Minimum Value"
-          onValueChange={_.partial(this.handleChange, 'min')}
+          onValueChange={_.partial(this.handleNumericChangeForStateKey, 'min')}
         />
         <NumericInput
           min={0}
           max={1000000}
           value={this.state.max}
           placeholder="Maximum Value"
-          onValueChange={_.partial(this.handleChange, 'max')}
+          onValueChange={_.partial(this.handleNumericChangeForStateKey, 'max')}
         />
         <NumericInput
           min={1}
           max={100}
           value={this.state.count}
           placeholder="Nodes to Generate"
-          onValueChange={_.partial(this.handleChange, 'count')}
+          onValueChange={_.partial(this.handleNumericChangeForStateKey, 'count')}
         />
         <Button
           text="Generate Numbers"

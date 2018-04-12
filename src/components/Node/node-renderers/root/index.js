@@ -10,7 +10,11 @@ import RootForm from './form';
 import websockets from '../../../../websockets';
 
 import { FormPopover } from '../utils';
-import { SOCKET_EVENTS } from '../../../../constants';
+
+import {
+  NODE_TYPES,
+  SOCKET_EVENTS,
+} from '../../../../constants';
 
 /**
  * Renders root node types.
@@ -27,16 +31,24 @@ export default class RootNode extends React.Component {
 
   state = { hovering: false }
 
+  /**
+   * Handles when a user hovers over the root node.
+   * @memberof RootNode
+   */
   handleNodeHover = () => {
     this.setState(state => ({ ...state, hovering: !state.hovering }));
   }
 
+  /**
+   * Handles the form submission of adding a new factory node
+   * @memberof RootNode
+   */
   handleFormSubmit= ({ name }) => {
     websockets.emit(SOCKET_EVENTS.UPSERT_NODES, [
       {
         value: name,
         parent: this.props.id,
-        type: 'factory',
+        type: NODE_TYPES.FACTORY,
       },
     ]);
   }

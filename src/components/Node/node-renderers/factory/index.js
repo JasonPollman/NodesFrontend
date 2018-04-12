@@ -43,17 +43,29 @@ export default class FactoryNode extends React.Component {
     hovering: false,
   }
 
+  /**
+   * Handles when a user changes the factory node's name (value).
+   * @memberof FactoryNode
+   */
   handleTextChange = (value) => {
     if (value === this.props.value) return;
-
     const { id } = this.props;
     websockets.emit(SOCKET_EVENTS.UPSERT_NODES, [{ id, value }]);
   }
 
+  /**
+   * Handles when a user hovers over the factory node.
+   * @memberof FactoryNode
+   */
   handleNodeHover = () => {
     this.setState(state => ({ ...state, hovering: !state.hovering }));
   }
 
+  /**
+   * When the form to generate new leaf nodes is submitted,
+   * this will delete all of the existing nodes and upsert the new ones.
+   * @memberof FactoryNode
+   */
   handleFormSubmit = (formValues) => {
     websockets.emit(SOCKET_EVENTS.COMPOSITE_ACTION, [
       {
@@ -67,6 +79,10 @@ export default class FactoryNode extends React.Component {
     ]);
   }
 
+  /**
+   * Handles the removal of a factory node.
+   * @memberof FactoryNode
+   */
   handleRemoval = () => {
     websockets.emit(SOCKET_EVENTS.DELETE_NODES, [{ id: this.props.id }]);
   }
@@ -74,7 +90,7 @@ export default class FactoryNode extends React.Component {
   /**
    * Renders this component.
    * @returns {React.Element} The rendered React element.
-   * @memberof Node
+   * @memberof FactoryNode
    */
   render() {
     const { value, children } = this.props;
