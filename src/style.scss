@@ -1,0 +1,25 @@
+@import '~normalize.css';
+@import '~@blueprintjs/core/lib/css/blueprint.css';
+@import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.display-inline-block {
+  display: inline-block;
+}
+
+.margin-left-10 {
+  margin-left: 10px;
+}
+
+.node {
+  margin-left: 10px;
+}
+
+.node-value {
+  padding: 5px;
+  height: 30px;
+}
+
