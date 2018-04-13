@@ -13,7 +13,7 @@ const webpack = require('webpack');
 const mergeWebpackConfig = require('webpack-merge');
 const common = require('./webpack.config');
 
-common.entry.bundle.unshift('react-hot-loader/patch');
+common.entry.dist.unshift('react-hot-loader/patch');
 
 module.exports = mergeWebpackConfig(common, {
   devtool: 'eval-source-map',

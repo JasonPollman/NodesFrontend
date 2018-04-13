@@ -53,8 +53,8 @@ const WelcomeCard = () => (
       The state of this app is persistent.
     </p>
     <p>
-      As other users interact with the app,
-      your screen will be updated to show their changes.
+      As other users interact with the app, their changes will be reflected here.
+      If you change something, it will also update on their end too.
     </p>
   </InfoCard>
 );
@@ -62,9 +62,9 @@ const WelcomeCard = () => (
 const InstructionsCard = () => (
   <InfoCard title="Let&apos;s generate some numbers!">
     <p>
-      Hover over a <span className="text-bold text-primary">factory</span> node and click the&nbsp;
-      <span className="pt-icon-add margin-right-5" />
-      icon to create new number nodes.
+      Click the <span className="pt-icon-add" /> icon beside a
+      <span className="text-bold text-primary"> factory</span> node
+      to generate new random number nodes.
     </p>
     <p>
       <span className="text-bold text-primary">Factory</span> nodes
@@ -72,16 +72,15 @@ const InstructionsCard = () => (
       icon.
     </p>
     <p>
-      If you want to create a new factory, hover over
-      the <span className="text-bold text-success">Root</span> node and
-      press the <span className="pt-icon-add margin-right-5" /> icon.
+      If you want to create a new factory, click the <span className="pt-icon-add margin-right-5" />
+      icon beside the <span className="text-bold text-success">Root</span> node.
     </p>
   </InfoCard>
 );
 
 const TechnologiesCard = () => (
   <InfoCard title="What technologies does this app use?" intent="success">
-    <p>Here&apos;s the lineup of the major frameworks and libraries used to create this app:</p>
+    <p>Here&apos;s the lineup of major frameworks and libraries used to create this app:</p>
     <h6 className="text-success">Backend</h6>
     <ul>
       <li>Node.js</li>
@@ -111,7 +110,7 @@ const HowItWorksCard = () => (
   <InfoCard title="How does this app work?" intent="danger">
     <p>
       Checkout the <span className="text-danger">readme.md</span> documentation
-      for each repositories to read more about the concepts and architecture that power
+      for each repository below to read more about the concepts and architecture that power
       this application.
     </p>
     <p>

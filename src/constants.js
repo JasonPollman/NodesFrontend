@@ -27,9 +27,18 @@ export default Object.assign(exports, Object.freeze({
   },
   // The various node types
   NODE_TYPES: {
-    ROOT: 'root',
-    NUMBER: 'number',
-    FACTORY: 'factory',
+    ROOT: {
+      type: 'root',
+      listensForUpdates: false,
+    },
+    NUMBER: {
+      type: 'number',
+      listensForUpdates: true,
+    },
+    FACTORY: {
+      type: 'factory',
+      listensForUpdates: false,
+    },
   },
   // The maximum number of number nodes a factory can generate
   MAX_ALLOWED_FACTORY_CHILD_NODES: 1000,

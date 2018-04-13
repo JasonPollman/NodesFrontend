@@ -13,7 +13,10 @@ import { Intent } from '@blueprintjs/core';
 import websockets from '../../websockets';
 import nodeRenderers from './node-renderers';
 
-import { SOCKET_EVENTS } from '../../constants';
+import {
+  NODE_TYPES,
+  SOCKET_EVENTS,
+} from '../../constants';
 
 const log = debug('NodeFactory');
 const iterateeKeyForNode = ({ id, type, value }) => `${id}-${type}-${value}`;
@@ -27,8 +30,9 @@ const iterateeKeyForNode = ({ id, type, value }) => `${id}-${type}-${value}`;
  */
 export default class Node extends React.Component {
   static propTypes = {
-    toast: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
+    toast: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
   }
 
   /**
@@ -49,7 +53,9 @@ export default class Node extends React.Component {
    * @memberof Node
    */
   componentDidMount() {
-    websockets.on(this.key, this.handleSocketUpdate);
+    if (_.get(NODE_TYPES, `${this.props.type}.listensForUpdates`, true)) {
+      websockets.on(this.key, this.handleSocketUpdate);
+    }
   }
 
   /**
@@ -59,7 +65,9 @@ export default class Node extends React.Component {
    * @memberof Node
    */
   componentWillUnmount() {
-    websockets.removeListener(this.key, this.handleSocketUpdate);
+    if (_.get(NODE_TYPES, `${this.props.type}.listensForUpdates`, true)) {
+      websockets.removeListener(this.key, this.handleSocketUpdate);
+    }
   }
 
   /**

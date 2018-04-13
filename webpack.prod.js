@@ -38,6 +38,7 @@ module.exports = mergeWebpackConfig(common, {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
+                outputStyle: 'compressed',
               },
             },
           ],
