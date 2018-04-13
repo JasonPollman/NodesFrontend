@@ -16,7 +16,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    bundle: [
+    dist: [
       'babel-polyfill',
       './src/index.js',
     ],
