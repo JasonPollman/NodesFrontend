@@ -36,7 +36,7 @@ export default class RootForm extends React.Component {
   }
 
   /**
-   * Handles form submission.
+   * Handles the factory node creation form submission.
    * @memberof RootForm
    */
   handleSubmit = (e) => {
@@ -52,7 +52,7 @@ export default class RootForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.state.disableSubmitButton ? _.noop : this.handleSubmit}>
-        <h5>Create a new number factory...</h5>
+        <h5>Create a new number factory</h5>
         <input
           className="full-width pt-input pt-intent-success"
           placeholder="Enter a factory name"

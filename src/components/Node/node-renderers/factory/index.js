@@ -16,6 +16,7 @@ import { FormPopover } from '../utils';
 import {
   NODE_TYPES,
   SOCKET_EVENTS,
+  SOCKET_SUMMARIES,
 } from '../../../../constants';
 
 const generateRandomNodes = (parent, { min, max, count }) => (
@@ -37,8 +38,6 @@ export default class FactoryNode extends React.Component {
   }
 
   state = {
-    isHovering: false,
-    popoverIsOpen: false,
     popoverShouldOpen: undefined,
   }
 
@@ -47,36 +46,45 @@ export default class FactoryNode extends React.Component {
    * @memberof FactoryNode
    */
   handleFactoryNameChange = (value) => {
-    if (value === this.props.value) return;
+    if (_.toLower(value) === _.toLower(this.props.value)) return;
     const { id } = this.props;
-    websockets.emit(SOCKET_EVENTS.UPSERT_NODES, [{ id, value }]);
-  }
 
-  /**
-   * Handles when a user hovers over the factory node.
-   * @memberof FactoryNode
-   */
-  handleNodeHover = () => {
-    this.setState(state => ({ ...state, isHovering: !state.isHovering }));
+    websockets.emit(
+      SOCKET_EVENTS.UPSERT_NODES,
+      [{ id, value }],
+      SOCKET_SUMMARIES.factoryNameUpdated(this.props.value, value),
+    );
   }
 
   /**
    * When the form to generate new number nodes is submitted,
-   * this will delete all of the existing nodes and upsert the new ones.
+   * this will emit a socket event to delete all of the existing
+   * nodes and upsert the new ones.
    * @memberof FactoryNode
    */
   handleFactoryFormSubmit = (formValues) => {
+    const { id, value, childNodes } = this.props;
+    const generatedFactoryNodes = generateRandomNodes(id, formValues);
     this.setState({ popoverShouldOpen: false });
-    websockets.emit(SOCKET_EVENTS.COMPOSITE_ACTION, [
-      {
-        event: SOCKET_EVENTS.DELETE_NODES,
-        args: [this.props.childNodes],
-      },
-      {
-        event: SOCKET_EVENTS.UPSERT_NODES,
-        args: [generateRandomNodes(this.props.id, formValues)],
-      },
-    ]);
+
+    websockets.emit(
+      SOCKET_EVENTS.COMPOSITE_ACTION,
+      [
+        {
+          event: SOCKET_EVENTS.DELETE_NODES,
+          args: [childNodes],
+        },
+        {
+          event: SOCKET_EVENTS.UPSERT_NODES,
+          args: [generatedFactoryNodes],
+        },
+      ],
+      SOCKET_SUMMARIES.factoryGeneratedNewNumbers(
+        value,
+        childNodes.length,
+        generatedFactoryNodes.length,
+      ),
+    );
   }
 
   /**
@@ -84,21 +92,20 @@ export default class FactoryNode extends React.Component {
    * @memberof FactoryNode
    */
   handleFactoryRemoval = () => {
-    websockets.emit(SOCKET_EVENTS.DELETE_NODES, [{ id: this.props.id }]);
+    websockets.emit(
+      SOCKET_EVENTS.DELETE_NODES,
+      [{ id: this.props.id }],
+      SOCKET_SUMMARIES.factoryRemoved(this.props.value),
+    );
   }
 
   /**
-   * Tells this component that the popover is open.
-   * @memberof FactoryNode
-   */
-  handlePopoverOpen = () => this.setState({ popoverIsOpen: true })
-
-  /**
    * Tells this component that the popover is closed.
+   * We use `popoverShouldOpen` to manually close the
+   * popover once the form has been submitted.
    * @memberof FactoryNode
    */
   handlePopoverClose = () => this.setState({
-    popoverIsOpen: false,
     popoverShouldOpen: undefined,
   })
 
@@ -108,43 +115,41 @@ export default class FactoryNode extends React.Component {
    * @memberof FactoryNode
    */
   render() {
-    const { isHovering, popoverShouldOpen, popoverIsOpen } = this.state;
+    const { popoverShouldOpen } = this.state;
     const { type, value, children } = this.props;
 
     return (
       <div
-        className={`node node-type-${type}`}
+        className={`node node-type-${type} font-size-16`}
         onMouseEnter={this.handleNodeHover}
         onMouseLeave={this.handleNodeHover}
       >
         <div className="display-inline-block">
+          <div className="cursor-pointer display-inline-block margin-left-5">
+            <FormPopover
+              {...this.props}
+              Form={FactoryForm}
+              isOpen={popoverShouldOpen}
+              onSubmit={this.handleFactoryFormSubmit}
+              popoverWillClose={this.handlePopoverClose}
+            />
+            <span
+              className="text-muted pt-icon-remove margin-right-5 font-size-11 top--2 position-relative"
+              onClick={this.handleFactoryRemoval}
+            />
+          </div>
           <div className="display-inline-block">
             <EditableText
               minWidth={20}
               selectAllOnFocus
               defaultValue={value}
-              placeholder="Anonymous Factory Node"
+              placeholder="Unnamed Factory"
               className="pt-intent-primary text-bold text-capitalize"
               onConfirm={this.handleFactoryNameChange}
             />
           </div>
         </div>
-        {
-          (isHovering || popoverIsOpen) && (
-            <div className="cursor-pointer display-inline-block margin-left-10">
-              <FormPopover
-                {...this.props}
-                Form={FactoryForm}
-                isOpen={popoverShouldOpen}
-                onSubmit={this.handleFactoryFormSubmit}
-                popoverDidOpen={this.handlePopoverOpen}
-                popoverWillClose={this.handlePopoverClose}
-              />
-              <span className="text-muted pt-icon-remove" onClick={this.handleFactoryRemoval} />
-            </div>
-          )
-        }
-        <div className="node-children">
+        <div className="margin-15">
           {children}
         </div>
       </div>

@@ -21,7 +21,7 @@ export const FormPopover = ({ Form, ...props }) => (
     popoverClassName="pt-popover-content-sizing"
     {...props}
   >
-    <span className="text-muted margin-right-3 pt-icon-add" />
+    <span className="text-muted margin-right-3 pt-icon-add font-size-11 top--2 position-relative" />
     <Form {...props} />
   </Popover>
 );

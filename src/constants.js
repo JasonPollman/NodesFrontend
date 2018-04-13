@@ -4,6 +4,9 @@
  * @file
  */
 
+import _ from 'lodash';
+import { Intent } from '@blueprintjs/core';
+
 export default Object.assign(exports, Object.freeze({
   NODE_ENV: process.env.NODE_ENV || 'production',
   // The id of the root node. This is the "null" UUIDv4.
@@ -30,4 +33,32 @@ export default Object.assign(exports, Object.freeze({
   },
   // The maximum number of number nodes a factory can generate
   MAX_ALLOWED_FACTORY_CHILD_NODES: 1000,
+  BACKEND_REPO: 'https://github.com/JasonPollman/NodesBackend',
+  FRONTEND_REPO: 'https://github.com/JasonPollman/NodesFrontend',
+  // Maps socket events to their "pretty" name
+  EVENT_NAME_TO_PRETTY_MAPPING: {
+    nodeInitialize: 'initializing',
+    upsertNodes: 'adding new',
+    deleteNodes: 'deleting',
+    compositeAction: 'adding new',
+  },
+  // The message to pipe to users when updates occur
+  SOCKET_SUMMARIES: {
+    factoryNameUpdated: (previousName, currentName) => ({
+      message: `Factory "${_.upperFirst(previousName)}" was renamed to "${_.upperFirst(currentName)}"`,
+      intent: Intent.PRIMARY,
+    }),
+    factoryGeneratedNewNumbers: (factoryName, deletedNodeCount, addedNodeCount) => ({
+      message: `Factory "${_.upperFirst(factoryName)}" was updated! (-${deletedNodeCount}, +${addedNodeCount})`,
+      intent: Intent.PRIMARY,
+    }),
+    factoryRemoved: factoryName => ({
+      message: `Factory "${_.upperFirst(factoryName)}" removed.`,
+      intent: Intent.WARNING,
+    }),
+    factoryNodeAdded: factoryName => ({
+      message: `New factory "${_.upperFirst(factoryName)}" created.`,
+      intent: Intent.SUCCESS,
+    }),
+  },
 }));

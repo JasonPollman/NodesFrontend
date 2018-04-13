@@ -8,6 +8,7 @@ import _ from 'lodash';
 import React from 'react';
 import debug from 'debug';
 import PropTypes from 'prop-types';
+import { Intent } from '@blueprintjs/core';
 
 import websockets from '../../websockets';
 import nodeRenderers from './node-renderers';
@@ -15,7 +16,7 @@ import nodeRenderers from './node-renderers';
 import { SOCKET_EVENTS } from '../../constants';
 
 const log = debug('NodeFactory');
-const iterateeKeyForNode = ({ id, value }) => id.concat(value);
+const iterateeKeyForNode = ({ id, type, value }) => `${id}-${type}-${value}`;
 
 /**
  * A component that is representative of a node within the node tree.
@@ -26,6 +27,7 @@ const iterateeKeyForNode = ({ id, value }) => id.concat(value);
  */
 export default class Node extends React.Component {
   static propTypes = {
+    toast: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
   }
 
@@ -65,8 +67,17 @@ export default class Node extends React.Component {
    * The data returned from the socket is mapped to the state of the component.
    * @memberof Node
    */
-  handleSocketUpdate = (data) => {
+  handleSocketUpdate = (data, toastSummary) => {
     log(`Socket event received "${this.key}"`, data);
+
+    if (toastSummary && _.isString(toastSummary.message)) {
+      this.props.toast({
+        timeout: 3000,
+        intent: Intent.PRIMARY,
+        ...toastSummary,
+      });
+    }
+
     this.setState(data);
   }
 
@@ -82,7 +93,7 @@ export default class Node extends React.Component {
         {
           _.map(
             this.state.children,
-            child => <Node key={iterateeKeyForNode(child)} {...child} />,
+            child => <Node toast={this.props.toast} key={iterateeKeyForNode(child)} {...child} />,
           )
         }
       </Renderer>

@@ -19,17 +19,14 @@ input, button {
 .cursor-pointer {
   cursor: pointer;
 }
+.position-relative {
+  position: relative;
+}
 .display-inline-block {
   display: inline-block;
 }
 .display-flex {
   display: flex;
-}
-.position-relative {
-  position: relative;
-}
-.top--20 {
-  top: -20px;
 }
 .flex-1 {
   flex: 1;
@@ -37,27 +34,57 @@ input, button {
 .flex-wrap {
   flex-wrap: wrap;
 }
-.margin-5 {
-  margin: 5px;
-}
-.margin-left-10 {
-  margin-left: 10px;
-}
-.margin-right-3 {
-  margin-right: 2px;
-}
-.margin-right-5 {
-  margin-right: 5px;
-}
-.padding-20 {
-  padding: 20px;
-}
 .full-width {
   width: 100%;
 }
-.min-width-250 {
-  min-width: 250px;
+
+@for $i from -21 to 21 {
+  .margin-#{$i}         { margin: #{$i}px;         }
+  .margin-right-#{$i}   { margin-right: #{$i}px;   }
+  .margin-left-#{$i}    { margin-left: #{$i}px;    }
+  .margin-top-#{$i}     { margin-top: #{$i}px;     }
+  .margin-bottom-#{$i}  { margin-bottom: #{$i}px;  }
+
+  .margin-left-right-#{$i}  {
+    margin-left: #{$i}px;
+    margin-right: #{$i}px;
+  }
+  .margin-top-bottom-#{$i}  {
+    margin-top: #{$i}px;
+    margin-bottom: #{$i}px;
+  }
+
+  .padding-#{$i}        { padding: #{$i}px;        }
+  .padding-right-#{$i}  { padding-right: #{$i}px;  }
+  .padding-left-#{$i}   { padding-left: #{$i}px;   }
+  .padding-top-#{$i}    { padding-top: #{$i}px;    }
+  .padding-bottom-#{$i} { padding-bottom: #{$i}px; }
+
+  .padding-left-right-#{$i} {
+    padding-left: #{$i}px;
+    padding-right: #{$i}px;
+  }
+  .padding-top-bottom-#{$i} {
+    padding-top: #{$i}px;
+    padding-bottom: #{$i}px;
+  }
+
+  .top-#{$i}            { top: #{$i}px;            }
+  .bottom-#{$i}         { bottom: #{$i}px;         }
+  .left-#{$i}           { left: #{$i}px;           }
+  .right-#{$i}          { right: #{$i}px;          }
 }
+
+@for $i from 1 to 11 {
+  $value: $i * 50;
+  .min-width-#{$value} { min-width: #{$value}px; }
+  .max-width-#{$value} { max-width: #{$value}px; }
+}
+
+@each $i in 11, 12, 14, 16, 18 {
+  .font-size-#{$i} { font-size: #{$i}px; }
+}
+
 .text-bold {
   font-weight: bold;
 }
@@ -67,19 +94,20 @@ input, button {
 .text-center {
   text-align: center;
 }
-.text-small {
-  font-size: 12px;
-}
-.text-primary {
+.text-primary,
+.text-primary:hover {
   color: $pt-intent-primary;
 }
-.text-success {
+.text-success,
+.text-success:hover {
   color: $pt-intent-success;
 }
-.text-warning {
+.text-warning,
+.text-warning:hover {
   color: $pt-intent-warning;
 }
-.text-danger {
+.text-danger,
+.text-danger:hover {
   color: $pt-intent-danger;
 }
 .text-muted {
@@ -88,25 +116,27 @@ input, button {
 .text-light {
   color: $pt-text-color-disabled;
 }
+.text-primary-light {
+  color: $pt-text-selection-color;
+}
 
 // Node specific styles
 .node {
-  font-size: 16px;
   min-height: 30px;
-
-  &.node-type-root {
-    > div > .node-children {
-      margin: 12px 0 0 6px;
-      border-left: 1px solid $pt-dark-text-color-disabled;
-    }
-  }
-
+  
   .pt-editable-content {
     cursor: pointer;
   }
   .pt-editable-text {
     height: 25px;
     max-height: 25px;
+  }
+
+  &.node-type-root {
+    > div > .node-children {
+      margin: 6px 0 0 6px;
+      border-left: 1px solid $pt-dark-text-color-disabled;
+    }
   }
   
   &.node-type-factory {
@@ -115,21 +145,11 @@ input, button {
       color: $pt-dark-text-color-disabled;
       margin-right: 6px;
     }
-    .node-children {
-      margin-left: 10px;
-      margin: 15px;
-    }
-  }
-
-  &.node-type-number {
-    margin: 0;
-    padding: 0 8px 8px 0;
-    display: inline-block;
   }
 }
 
+// Hides nav bar items for small screens
 @media (max-width: 768px) {
-  .pt-navbar-divider:first-of-type,
   .navbar-middle {
     display: none;
   }

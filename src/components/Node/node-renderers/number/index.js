@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { Tag } from '@blueprintjs/core';
 
 const NumberNode = ({ type, value }) => (
-  <div className={`node node-leaf node-type-${type}`}>
+  <div className={`display-inline-block margin-0 padding-top-0 padding-right-0 padding-left-8 pad-bottom-8 node node-type-${type}`}>
     <Tag className="node-value pt-minimal pt-intent-primary">{value}</Tag>
   </div>
 );

@@ -43,34 +43,28 @@ export default class FactoryForm extends React.Component {
     const { min, max, count } = { ...this.state, [key]: value };
     this.setState(state => ({ ...state, [key]: value }));
 
-    if (min && min > max) {
-      return this.setState({
-        error: 'The mimimum value cannot exceed the maximum node value',
-      });
+    const minIsNumeric = _.isNumber(min);
+    const maxIsNumeric = _.isNumber(max);
+    const countIsNumeric = _.isNumber(count);
+
+    // Validate all of the relevant input cases.
+    if (min < 0) return this.setState({ error: 'The mimumum number value must be at least zero.' });
+    if (max < 0) return this.setState({ error: 'The maximum number value must be at least zero.' });
+
+    if (minIsNumeric && maxIsNumeric && min > max) {
+      return this.setState({ error: 'The mimimum value cannot exceed the max.' });
     }
 
-    if (min < 0) {
+    if (countIsNumeric && (count < 1 || count > MAX_ALLOWED_FACTORY_CHILD_NODES)) {
       return this.setState({
-        error: 'The mimumum node value must be at least zero.',
-      });
-    }
-
-    if (max < 0) {
-      return this.setState({
-        error: 'The mimumum node value must be at least zero.',
-      });
-    }
-
-    if (count < 1 || count > MAX_ALLOWED_FACTORY_CHILD_NODES) {
-      return this.setState({
-        error: 'The number of nodes to generate must be between 1 and 100',
+        error: `The number of nodes to generate must be between 1 and ${MAX_ALLOWED_FACTORY_CHILD_NODES}`,
       });
     }
 
     return this.setState(state => ({
       ...state,
       [key]: _.clamp(value, 0, Number.MAX_SAFE_INTEGER),
-      error: !(Boolean(min) && Boolean(max)),
+      error: !(minIsNumeric && maxIsNumeric && countIsNumeric),
     }));
   }
 
@@ -129,6 +123,7 @@ export default class FactoryForm extends React.Component {
               intent={Intent.DANGER}
               title="Oops..."
               icon="warning-sign"
+              className="margin-top-5"
             >
               {this.state.error}
             </Callout>

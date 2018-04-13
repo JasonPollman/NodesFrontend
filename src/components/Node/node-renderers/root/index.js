@@ -16,6 +16,7 @@ import { FormPopover } from '../utils';
 import {
   NODE_TYPES,
   SOCKET_EVENTS,
+  SOCKET_SUMMARIES,
 } from '../../../../constants';
 
 /**
@@ -31,18 +32,7 @@ export default class RootNode extends React.Component {
     children: PropTypes.arrayOf(PropTypes.node).isRequired,
   };
 
-  state = {
-    isHovering: false,
-    popoverIsOpen: undefined,
-  }
-
-  /**
-   * Handles when a user hovers over the root node.
-   * @memberof RootNode
-   */
-  handleNodeHover = () => {
-    this.setState(state => ({ ...state, isHovering: !state.isHovering }));
-  }
+  state = {}
 
   /**
    * Handles the form submission of adding a new factory node.
@@ -51,27 +41,24 @@ export default class RootNode extends React.Component {
    */
   handleFormSubmit= ({ name }) => {
     this.setState({ popoverShouldOpen: false });
-    websockets.emit(SOCKET_EVENTS.UPSERT_NODES, [
-      {
-        value: name,
-        parent: this.props.id,
-        type: NODE_TYPES.FACTORY,
-      },
-    ]);
+    websockets.emit(
+      SOCKET_EVENTS.UPSERT_NODES,
+      [
+        {
+          value: name,
+          parent: this.props.id,
+          type: NODE_TYPES.FACTORY,
+        },
+      ],
+      SOCKET_SUMMARIES.factoryNodeAdded(name),
+    );
   }
-
-  /**
-   * Tells this component that the popover is open.
-   * @memberof RootNode
-   */
-  handlePopoverOpen = () => this.setState({ popoverIsOpen: true })
 
   /**
    * Tells this component that the popover is closed.
    * @memberof RootNode
    */
   handlePopoverClose = () => this.setState({
-    popoverIsOpen: false,
     popoverShouldOpen: undefined,
   })
 
@@ -82,41 +69,32 @@ export default class RootNode extends React.Component {
    */
   render() {
     const { type, value, children = [] } = this.props;
-    const { popoverShouldOpen, popoverIsOpen, isHovering } = this.state;
+    const { popoverShouldOpen } = this.state;
 
     return (
       <div className={`node node-type-${type}`}>
-        <div
-          onMouseEnter={this.handleNodeHover}
-          onMouseLeave={this.handleNodeHover}
-        >
-          <span className="text-light text-small pt-icon-layout-hierarchy margin-right-5" />
-          <span className="text-success text-bold text-capitalize">{value}</span>
-          {
-            (isHovering || popoverIsOpen) && (
-              <div className="cursor-pointer display-inline-block margin-left-10 pt-te">
-                <FormPopover
-                  {...this.props}
-                  Form={RootForm}
-                  isOpen={popoverShouldOpen}
-                  onSubmit={this.handleFormSubmit}
-                  popoverDidOpen={this.handlePopoverOpen}
-                  popoverWillClose={this.handlePopoverClose}
-                />
-              </div>
-            )
-          }
+        <div>
+          <span className="top--2 position-relative text-light font-size-11 pt-icon-layout-hierarchy margin-right-5" />
+          <div className="cursor-pointer display-inline-block margin-left-5">
+            <FormPopover
+              {...this.props}
+              Form={RootForm}
+              isOpen={popoverShouldOpen}
+              onSubmit={this.handleFormSubmit}
+              popoverWillClose={this.handlePopoverClose}
+            />
+          </div>
+          <span className="text-success font-size-16 text-bold text-capitalize margin-left-2">{value}</span>
         </div>
         {
           !children.length && (
             <NonIdealState
-              visual="flag"
-              title="Hmmm... what happened to all the factory nodes?"
+              visual="info-sign"
+              title="Hmm... what happened to all the factory nodes?"
               className="text-muted"
             >
               <div className="text-muted">
-                Hover over the root node and click the <span className="pt-icon-add margin-right-5" />
-                icon to create some!
+                Click the <span className="pt-icon-add margin-right-5" /> icon to create some!
               </div>
             </NonIdealState>
           )
@@ -125,7 +103,7 @@ export default class RootNode extends React.Component {
           Boolean(children.length) && (
             <div>
               <div className="node-children">{children}</div>
-              <span className="text-light text-small pt-icon-more margin-right-5 top--20 position-relative" />
+              <span className="text-light font-size-11 pt-icon-more margin-right-5 top--15 position-relative" />
             </div>
           )
         }
