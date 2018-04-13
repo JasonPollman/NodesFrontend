@@ -90,7 +90,7 @@ export default class RootNode extends React.Component {
           !children.length && (
             <NonIdealState
               visual="info-sign"
-              title="Hmm... what happened to all the factory nodes?"
+              title="Looks like someone deleted all the factory nodes..."
               className="text-muted"
             >
               <div className="text-muted">
