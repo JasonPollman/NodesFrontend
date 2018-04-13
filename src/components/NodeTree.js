@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Node from './Node';
 import websockets from '../websockets';
@@ -17,6 +18,14 @@ import { SOCKET_EVENTS } from '../constants';
  * @export
  */
 export default class NodeTree extends React.Component {
+  static propTypes = {
+    className: PropTypes.string,
+  }
+
+  static defaultProps = {
+    className: '',
+  }
+
   state = {
     root: null,
   };
@@ -57,6 +66,12 @@ export default class NodeTree extends React.Component {
    * @memberof NodeTree
    */
   render() {
-    return this.state.root && <Node {...this.state.root} />;
+    return (
+      <div className={`padding-20 min-width-300 ${this.props.className}`}>
+        {
+          this.state.root && <Node {...this.state.root} />
+        }
+      </div>
+    );
   }
 }

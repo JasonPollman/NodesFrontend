@@ -78,16 +78,14 @@ export default class Node extends React.Component {
   render() {
     const Renderer = nodeRenderers[this.state.type] || false;
     return Renderer && (
-      <div className={`node node-type-${this.state.type}`}>
-        <Renderer {...this.state} childNodes={this.state.children}>
-          {
-            _.map(
-              _.sortBy(this.state.children, ['value']),
-              child => <Node key={iterateeKeyForNode(child)} {...child} />,
-            )
-          }
-        </Renderer>
-      </div>
+      <Renderer {...this.state} childNodes={this.state.children}>
+        {
+          _.map(
+            this.state.children,
+            child => <Node key={iterateeKeyForNode(child)} {...child} />,
+          )
+        }
+      </Renderer>
     );
   }
 }

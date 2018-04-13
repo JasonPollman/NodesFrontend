@@ -25,7 +25,9 @@ export default Object.assign(exports, Object.freeze({
   // The various node types
   NODE_TYPES: {
     ROOT: 'root',
-    LEAF: 'leaf',
+    NUMBER: 'number',
     FACTORY: 'factory',
   },
+  // The maximum number of number nodes a factory can generate
+  MAX_ALLOWED_FACTORY_CHILD_NODES: 1000,
 }));

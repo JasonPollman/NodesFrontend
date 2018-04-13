@@ -6,7 +6,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@blueprintjs/core';
+import { Button, Intent } from '@blueprintjs/core';
 
 /**
  * The form for root nodes.
@@ -21,22 +21,26 @@ export default class RootForm extends React.Component {
 
   state = {
     value: '',
-    error: null,
+    disableSubmitButton: true,
   }
 
   /**
-   * Handles when the root form input to add new factory nodes is updated.
+   * Handles when the root form input to add a new factory nodes is updated.
    * @memberof RootForm
    */
-  handleTextChange = (e) => {
-    this.setState({ name: e.target.value });
+  handleFactoryNameInputChange = (e) => {
+    this.setState({
+      name: e.target.value,
+      disableSubmitButton: e.target.value.length === 0,
+    });
   }
 
   /**
    * Handles form submission.
    * @memberof RootForm
    */
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault();
     this.props.onSubmit(this.state);
   }
 
@@ -47,21 +51,22 @@ export default class RootForm extends React.Component {
    */
   render() {
     return (
-      <div>
+      <form onSubmit={this.state.disableSubmitButton ? _.noop : this.handleSubmit}>
+        <h5>Create a new number factory...</h5>
         <input
-          className="pt-input"
-          placeholder="Factory Node Name"
-          onChange={this.handleTextChange}
+          className="full-width pt-input pt-intent-success"
+          placeholder="Enter a factory name"
+          onChange={this.handleFactoryNameInputChange}
         />
+        <br />
         <Button
-          text="Create Factory Node"
-          disabled={Boolean(this.state.error)}
-          onClick={this.state.error ? _.noop : this.handleSubmit}
+          text="Create"
+          type="submit"
+          intent={Intent.SUCCESS}
+          className="full-width"
+          disabled={Boolean(this.state.disableSubmitButton)}
         />
-        {
-          this.state.error && <div className="form-error-text">{this.state.error}</div>
-        }
-      </div>
+      </form>
     );
   }
 }

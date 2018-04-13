@@ -7,25 +7,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  Tag,
   Popover,
   PopoverInteractionKind,
 } from '@blueprintjs/core';
 
+/**
+ * Creates a Popover containing the given form.
+ * @param {object} props React props.
+ */
 export const FormPopover = ({ Form, ...props }) => (
   <Popover
-    interactionKind={PopoverInteractionKind.CLICK_TARGET_ONLY}
+    interactionKind={PopoverInteractionKind.CLICK}
     popoverClassName="pt-popover-content-sizing"
+    {...props}
   >
-    <Tag className="pt-round">
-      <span className="pt-icon-share" />
-    </Tag>
+    <span className="text-muted margin-right-3 pt-icon-add" />
     <Form {...props} />
   </Popover>
 );
 
 FormPopover.propTypes = {
-  Form: PropTypes.node.isRequired,
+  Form: PropTypes.func.isRequired,
 };
 
 

@@ -9,8 +9,12 @@ import PropTypes from 'prop-types';
 
 import {
   Button,
+  Callout,
   NumericInput,
+  Intent,
 } from '@blueprintjs/core';
+
+import { MAX_ALLOWED_FACTORY_CHILD_NODES } from '../../../../constants';
 
 /**
  * The input form for a factory Node.
@@ -19,6 +23,7 @@ import {
  */
 export default class FactoryForm extends React.Component {
   static propTypes = {
+    value: PropTypes.string.isRequired,
     onSubmit: PropTypes.func.isRequired,
   }
 
@@ -31,7 +36,7 @@ export default class FactoryForm extends React.Component {
 
   /**
    * Handles when a user changes one of the numeric inputs
-   * on the leaf node generation form.
+   * on the number node generation form.
    * @memberof FactoryForm
    */
   handleNumericChangeForStateKey = (key, value) => {
@@ -56,7 +61,7 @@ export default class FactoryForm extends React.Component {
       });
     }
 
-    if (count < 1 || count > 1000) {
+    if (count < 1 || count > MAX_ALLOWED_FACTORY_CHILD_NODES) {
       return this.setState({
         error: 'The number of nodes to generate must be between 1 and 100',
       });
@@ -70,10 +75,11 @@ export default class FactoryForm extends React.Component {
   }
 
   /**
-   * Handles the form submission of new lead nodes.
+   * Handles the form submission of new number nodes.
    * @memberof FactoryForm
    */
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault();
     this.props.onSubmit(this.state);
   }
 
@@ -84,7 +90,11 @@ export default class FactoryForm extends React.Component {
    */
   render() {
     return (
-      <div>
+      <form onSubmit={this.state.error ? _.noop : this.handleSubmit}>
+        <h5>
+          Generate some random numbers for factory&nbsp;
+          <span className="text-primary text-capitalize">{this.props.value}</span>
+        </h5>
         <NumericInput
           min={0}
           max={1000000}
@@ -107,14 +117,24 @@ export default class FactoryForm extends React.Component {
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'count')}
         />
         <Button
+          icon="add"
+          type="submit"
           text="Generate Numbers"
+          intent={Intent.PRIMARY}
           disabled={Boolean(this.state.error)}
-          onClick={this.state.error ? _.noop : this.handleSubmit}
         />
         {
-          this.state.error && <div className="form-error-text">{this.state.error}</div>
+          _.isString(this.state.error) && (
+            <Callout
+              intent={Intent.DANGER}
+              title="Oops..."
+              icon="warning-sign"
+            >
+              {this.state.error}
+            </Callout>
+          )
         }
-      </div>
+      </form>
     );
   }
 }

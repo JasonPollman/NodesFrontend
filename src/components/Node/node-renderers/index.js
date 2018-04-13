@@ -4,8 +4,8 @@
  * @file
  */
 
-export leaf from './leaf';
 export root from './root';
+export number from './number';
 export factory from './factory';
 
 export default exports;

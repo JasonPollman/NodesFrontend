@@ -1,25 +1,136 @@
 @import '~normalize.css';
+@import '~@blueprintjs/core/lib/scss/variables.scss';
 @import '~@blueprintjs/core/lib/css/blueprint.css';
 @import '~@blueprintjs/icons/lib/css/blueprint-icons.css';
+@import '~font-awesome/css/font-awesome.css';
 
+// Element Styles
+html, body {
+  min-width: 300px;
+}
+body {
+  background-color: $pt-app-background-color;
+}
+input, button {
+  margin-bottom: 5px;
+}
+
+// Generic styles
 .cursor-pointer {
   cursor: pointer;
 }
-
 .display-inline-block {
   display: inline-block;
 }
-
+.display-flex {
+  display: flex;
+}
+.position-relative {
+  position: relative;
+}
+.top--20 {
+  top: -20px;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.margin-5 {
+  margin: 5px;
+}
 .margin-left-10 {
   margin-left: 10px;
 }
+.margin-right-3 {
+  margin-right: 2px;
+}
+.margin-right-5 {
+  margin-right: 5px;
+}
+.padding-20 {
+  padding: 20px;
+}
+.full-width {
+  width: 100%;
+}
+.min-width-250 {
+  min-width: 250px;
+}
+.text-bold {
+  font-weight: bold;
+}
+.text-capitalize {
+  text-transform: capitalize;
+}
+.text-center {
+  text-align: center;
+}
+.text-small {
+  font-size: 12px;
+}
+.text-primary {
+  color: $pt-intent-primary;
+}
+.text-success {
+  color: $pt-intent-success;
+}
+.text-warning {
+  color: $pt-intent-warning;
+}
+.text-danger {
+  color: $pt-intent-danger;
+}
+.text-muted {
+  color: $pt-text-color-muted;
+}
+.text-light {
+  color: $pt-text-color-disabled;
+}
 
+// Node specific styles
 .node {
-  margin-left: 10px;
+  font-size: 16px;
+  min-height: 30px;
+
+  &.node-type-root {
+    > div > .node-children {
+      margin: 12px 0 0 6px;
+      border-left: 1px solid $pt-dark-text-color-disabled;
+    }
+  }
+
+  .pt-editable-content {
+    cursor: pointer;
+  }
+  .pt-editable-text {
+    height: 25px;
+    max-height: 25px;
+  }
+  
+  &.node-type-factory {
+    &:before {
+      content: '—';
+      color: $pt-dark-text-color-disabled;
+      margin-right: 6px;
+    }
+    .node-children {
+      margin-left: 10px;
+      margin: 15px;
+    }
+  }
+
+  &.node-type-number {
+    margin: 0;
+    padding: 0 8px 8px 0;
+    display: inline-block;
+  }
 }
 
-.node-value {
-  padding: 5px;
-  height: 30px;
+@media (max-width: 768px) {
+  .pt-navbar-divider:first-of-type,
+  .navbar-middle {
+    display: none;
+  }
 }
-

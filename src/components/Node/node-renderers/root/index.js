@@ -6,6 +6,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { NonIdealState } from '@blueprintjs/core';
+
 import RootForm from './form';
 import websockets from '../../../../websockets';
 
@@ -29,21 +31,26 @@ export default class RootNode extends React.Component {
     children: PropTypes.arrayOf(PropTypes.node).isRequired,
   };
 
-  state = { hovering: false }
+  state = {
+    isHovering: false,
+    popoverIsOpen: undefined,
+  }
 
   /**
    * Handles when a user hovers over the root node.
    * @memberof RootNode
    */
   handleNodeHover = () => {
-    this.setState(state => ({ ...state, hovering: !state.hovering }));
+    this.setState(state => ({ ...state, isHovering: !state.isHovering }));
   }
 
   /**
-   * Handles the form submission of adding a new factory node
+   * Handles the form submission of adding a new factory node.
+   * This will close the form popover as well.
    * @memberof RootNode
    */
   handleFormSubmit= ({ name }) => {
+    this.setState({ popoverShouldOpen: false });
     websockets.emit(SOCKET_EVENTS.UPSERT_NODES, [
       {
         value: name,
@@ -54,31 +61,74 @@ export default class RootNode extends React.Component {
   }
 
   /**
+   * Tells this component that the popover is open.
+   * @memberof RootNode
+   */
+  handlePopoverOpen = () => this.setState({ popoverIsOpen: true })
+
+  /**
+   * Tells this component that the popover is closed.
+   * @memberof RootNode
+   */
+  handlePopoverClose = () => this.setState({
+    popoverIsOpen: false,
+    popoverShouldOpen: undefined,
+  })
+
+  /**
    * Renders this component.
    * @returns {React.Element} The rendered React element.
    * @memberof Node
    */
   render() {
-    const { value, children } = this.props;
+    const { type, value, children = [] } = this.props;
+    const { popoverShouldOpen, popoverIsOpen, isHovering } = this.state;
+
     return (
-      <div>
+      <div className={`node node-type-${type}`}>
         <div
-          className="node-value"
           onMouseEnter={this.handleNodeHover}
           onMouseLeave={this.handleNodeHover}
         >
-          {value}
+          <span className="text-light text-small pt-icon-layout-hierarchy margin-right-5" />
+          <span className="text-success text-bold text-capitalize">{value}</span>
           {
-            this.state.hovering && (
-              <div className="cursor-pointer display-inline-block margin-left-10">
-                <FormPopover Form={RootForm} {...this.props} onSubmit={this.handleFormSubmit} />
+            (isHovering || popoverIsOpen) && (
+              <div className="cursor-pointer display-inline-block margin-left-10 pt-te">
+                <FormPopover
+                  {...this.props}
+                  Form={RootForm}
+                  isOpen={popoverShouldOpen}
+                  onSubmit={this.handleFormSubmit}
+                  popoverDidOpen={this.handlePopoverOpen}
+                  popoverWillClose={this.handlePopoverClose}
+                />
               </div>
             )
           }
         </div>
-        <div className="node-children">
-          {children}
-        </div>
+        {
+          !children.length && (
+            <NonIdealState
+              visual="flag"
+              title="Hmmm... what happened to all the factory nodes?"
+              className="text-muted"
+            >
+              <div className="text-muted">
+                Hover over the root node and click the <span className="pt-icon-add margin-right-5" />
+                icon to create some!
+              </div>
+            </NonIdealState>
+          )
+        }
+        {
+          Boolean(children.length) && (
+            <div>
+              <div className="node-children">{children}</div>
+              <span className="text-light text-small pt-icon-more margin-right-5 top--20 position-relative" />
+            </div>
+          )
+        }
       </div>
     );
   }
