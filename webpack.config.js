@@ -116,6 +116,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin(_.mapValues({
       'process.env.NODE_ENV': _.get(process.env, 'NODE_ENV', 'production'),
+      'process.env.SOCKET_HOST_URL': _.get(process.env, 'SOCKET_HOST_URL', 'http://localhost:3000'),
     }, JSON.stringify)),
   ],
 };
