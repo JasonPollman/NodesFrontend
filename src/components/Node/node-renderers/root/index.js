@@ -95,7 +95,7 @@ export default class RootNode extends React.Component {
               className="text-muted"
             >
               <div className="text-muted">
-                Click the <span className="pt-icon-add margin-right-5" /> icon to create some!
+                Click the <span className="pt-icon-add" /> icon to create some!
               </div>
             </NonIdealState>
           )
