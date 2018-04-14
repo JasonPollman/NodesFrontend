@@ -11,6 +11,7 @@
     ]
   ],
   "plugins": [
+    "lodash",
     "transform-runtime",
     "transform-class-properties"
   ]
