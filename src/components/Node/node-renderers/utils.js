@@ -15,19 +15,24 @@ import {
  * Creates a Popover containing the given form.
  * @param {object} props React props.
  */
-export const FormPopover = ({ Form, ...props }) => (
+export const FormPopover = ({ Form, plusIconAdditionalClasses, ...props }) => (
   <Popover
     interactionKind={PopoverInteractionKind.CLICK}
     popoverClassName="pt-popover-content-sizing"
     {...props}
   >
-    <span className="text-muted margin-right-3 pt-icon-add font-size-11 top--2 position-relative" />
+    <span className={`text-muted margin-right-3 pt-icon-add font-size-11 top--2 position-relative ${plusIconAdditionalClasses}`} />
     <Form {...props} />
   </Popover>
 );
 
 FormPopover.propTypes = {
   Form: PropTypes.func.isRequired,
+  plusIconAdditionalClasses: PropTypes.string,
+};
+
+FormPopover.defaultProps = {
+  plusIconAdditionalClasses: '',
 };
 
 

@@ -41,7 +41,7 @@ export default Object.assign(exports, Object.freeze({
     },
   },
   // The maximum number of number nodes a factory can generate
-  MAX_ALLOWED_FACTORY_CHILD_NODES: 1000,
+  MAX_ALLOWED_FACTORY_CHILD_NODES: 15,
   BACKEND_REPO: 'https://github.com/JasonPollman/NodesBackend',
   FRONTEND_REPO: 'https://github.com/JasonPollman/NodesFrontend',
   // Maps socket events to their "pretty" name

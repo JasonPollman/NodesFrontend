@@ -39,7 +39,11 @@ export default class FactoryForm extends React.Component {
    * on the number node generation form.
    * @memberof FactoryForm
    */
-  handleNumericChangeForStateKey = (key, value) => {
+  handleNumericChangeForStateKey = (key, inputValue) => {
+    // Using value || 0 since there's a bug in blueprints numeric input
+    // when trying to input a negative value via keyboard.
+    const value = inputValue || 0;
+
     const { min, max, count } = { ...this.state, [key]: value };
     this.setState(state => ({ ...state, [key]: value }));
 
@@ -51,9 +55,8 @@ export default class FactoryForm extends React.Component {
     if (min < 0) return this.setState({ error: 'The mimumum number value must be at least zero.' });
     if (max < 0) return this.setState({ error: 'The maximum number value must be at least zero.' });
 
-    if (minIsNumeric && maxIsNumeric && min > max) {
-      return this.setState({ error: 'The mimimum value cannot exceed the max.' });
-    }
+    let adjustedMax = max;
+    if (minIsNumeric && min > max) adjustedMax = min;
 
     if (countIsNumeric && (count < 1 || count > MAX_ALLOWED_FACTORY_CHILD_NODES)) {
       return this.setState({
@@ -63,7 +66,8 @@ export default class FactoryForm extends React.Component {
 
     return this.setState(state => ({
       ...state,
-      [key]: _.clamp(value, 0, Number.MAX_SAFE_INTEGER),
+      max: adjustedMax,
+      [key]: _.clamp(key === 'max' ? adjustedMax : value, 0, Number.MAX_SAFE_INTEGER),
       error: !(minIsNumeric && maxIsNumeric && countIsNumeric),
     }));
   }
@@ -94,6 +98,7 @@ export default class FactoryForm extends React.Component {
           max={1000000}
           value={this.state.min}
           placeholder="Minimum Value"
+          minorStepSize={null}
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'min')}
         />
         <NumericInput
@@ -101,13 +106,15 @@ export default class FactoryForm extends React.Component {
           max={1000000}
           value={this.state.max}
           placeholder="Maximum Value"
+          minorStepSize={null}
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'max')}
         />
         <NumericInput
           min={1}
-          max={100}
+          max={MAX_ALLOWED_FACTORY_CHILD_NODES}
           value={this.state.count}
           placeholder="Nodes to Generate"
+          minorStepSize={null}
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'count')}
         />
         <Button

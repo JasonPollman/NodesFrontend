@@ -145,6 +145,9 @@ input, button {
       color: $pt-dark-text-color-disabled;
       margin-right: 6px;
     }
+    &:last-child {
+      min-height: 0;
+    }
   }
 }
 

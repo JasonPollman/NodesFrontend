@@ -14,8 +14,7 @@
     "url": "https://github.com/JasonPollman/FactoryNodes.git"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha ./test",
-    "test:cover": "NODE_ENV=test nyc mocha",
+    "lint": "npx eslint ./src",
     "build": "NODE_ENV=production webpack --config ./webpack.prod.js",
     "dev": "NODE_ENV=development webpack-dev-server --hot --progress --config ./webpack.dev.js"
   },

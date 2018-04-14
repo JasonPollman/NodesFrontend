@@ -81,6 +81,7 @@ export default class RootNode extends React.Component {
               Form={RootForm}
               isOpen={popoverShouldOpen}
               onSubmit={this.handleFormSubmit}
+              plusIconAdditionalClasses="font-size-16"
               popoverWillClose={this.handlePopoverClose}
             />
           </div>
@@ -103,7 +104,6 @@ export default class RootNode extends React.Component {
           Boolean(children.length) && (
             <div>
               <div className="node-children">{children}</div>
-              <span className="text-light font-size-11 pt-icon-more margin-right-5 top--15 position-relative" />
             </div>
           )
         }
