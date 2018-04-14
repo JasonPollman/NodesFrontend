@@ -56,7 +56,7 @@ export default class FactoryForm extends React.Component {
     if (max < 0) return this.setState({ error: 'The maximum number value must be at least zero.' });
 
     if (minIsNumeric && maxIsNumeric && min > max) {
-      return this.setState({ error: 'The maximum value must be greator than the minimum.' });
+      return this.setState({ error: 'The maximum value must be greater than the minimum.' });
     }
 
     if (countIsNumeric && (count < 1 || count > MAX_ALLOWED_FACTORY_CHILD_NODES)) {
