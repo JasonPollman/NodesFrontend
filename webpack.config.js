@@ -97,6 +97,14 @@ module.exports = {
         ],
       },
       {
+        test: /\.ico$/,
+        use: [
+          {
+            loader: 'file-loader?name=[name].[ext]',
+          },
+        ],
+      },
+      {
         test: /\.(jpe?g|png|gif|svg)$/,
         use: [
           {

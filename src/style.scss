@@ -37,8 +37,14 @@ input, button {
 .full-width {
   width: 100%;
 }
+.border-radius-circle {
+  border-radius: 50%;
+}
+.vertical-align-middle {
+  vertical-align: middle;
+}
 
-@for $i from -21 to 21 {
+@for $i from -31 to 31 {
   .margin-#{$i}         { margin: #{$i}px;         }
   .margin-right-#{$i}   { margin-right: #{$i}px;   }
   .margin-left-#{$i}    { margin-left: #{$i}px;    }
@@ -118,6 +124,9 @@ input, button {
 }
 .text-primary-light {
   color: $pt-text-selection-color;
+}
+.text-dark-red {
+  color: #c23030;
 }
 
 // Node specific styles

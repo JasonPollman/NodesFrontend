@@ -55,8 +55,9 @@ export default class FactoryForm extends React.Component {
     if (min < 0) return this.setState({ error: 'The mimumum number value must be at least zero.' });
     if (max < 0) return this.setState({ error: 'The maximum number value must be at least zero.' });
 
-    let adjustedMax = max;
-    if (minIsNumeric && min > max) adjustedMax = min;
+    if (minIsNumeric && maxIsNumeric && min > max) {
+      return this.setState({ error: 'The maximum value must be greator than the minimum.' });
+    }
 
     if (countIsNumeric && (count < 1 || count > MAX_ALLOWED_FACTORY_CHILD_NODES)) {
       return this.setState({
@@ -66,8 +67,7 @@ export default class FactoryForm extends React.Component {
 
     return this.setState(state => ({
       ...state,
-      max: adjustedMax,
-      [key]: _.clamp(key === 'max' ? adjustedMax : value, 0, Number.MAX_SAFE_INTEGER),
+      [key]: _.clamp(value, 0, Number.MAX_SAFE_INTEGER),
       error: !(minIsNumeric && maxIsNumeric && countIsNumeric),
     }));
   }
@@ -96,16 +96,18 @@ export default class FactoryForm extends React.Component {
         <NumericInput
           min={0}
           max={1000000}
+          className="pt-fill"
           value={this.state.min}
-          placeholder="Minimum Value"
+          placeholder="Minimum number value"
           minorStepSize={null}
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'min')}
         />
         <NumericInput
           min={0}
           max={1000000}
+          className="pt-fill"
           value={this.state.max}
-          placeholder="Maximum Value"
+          placeholder="Maximum number value"
           minorStepSize={null}
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'max')}
         />
@@ -113,7 +115,8 @@ export default class FactoryForm extends React.Component {
           min={1}
           max={MAX_ALLOWED_FACTORY_CHILD_NODES}
           value={this.state.count}
-          placeholder="Nodes to Generate"
+          className="pt-fill"
+          placeholder="Number of nodes to generate"
           minorStepSize={null}
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'count')}
         />
@@ -132,7 +135,7 @@ export default class FactoryForm extends React.Component {
               icon="warning-sign"
               className="margin-top-5"
             >
-              {this.state.error}
+              <span className="text-dark-red">{this.state.error}</span>
             </Callout>
           )
         }

@@ -7,6 +7,8 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import ApplicationContainer from './components/ApplicationContainer';
+
+import './favicon.ico';
 import './style.scss';
 
 /**

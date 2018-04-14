@@ -149,7 +149,7 @@ export default class FactoryNode extends React.Component {
             />
           </div>
         </div>
-        <div className="margin-15">
+        <div className="margin-5 margin-left-30">
           {children}
         </div>
       </div>

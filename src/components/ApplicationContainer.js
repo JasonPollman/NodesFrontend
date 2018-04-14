@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Gravatar from 'react-gravatar';
 
 import {
   Card,
@@ -100,9 +101,18 @@ const TechnologiesCard = () => (
 );
 
 const AuthorCard = () => (
-  <InfoCard title="Author" intent="success">
-    Jason Pollman<br />
-    <a className="text-success" href="mailto:jasonjpollman@gmail.com">jasonjpollman@gmail.com</a>
+  <InfoCard title="Author" intent="primary">
+    <div className="display-inline-block vertical-align-middle margin-right-10">
+      <Gravatar
+        email="jasonjpollman@gmail.com"
+        size={60}
+        className="border-radius-circle"
+      />
+    </div>
+    <div className="display-inline-block">
+      <h4 className="margin-bottom-0">Jason Pollman</h4>
+      <a className="text-primary" href="mailto:jasonjpollman@gmail.com">jasonjpollman@gmail.com</a>
+    </div>
   </InfoCard>
 );
 
