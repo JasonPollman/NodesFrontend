@@ -27,15 +27,15 @@ export default Object.assign(exports, Object.freeze({
   },
   // The various node types
   NODE_TYPES: {
-    ROOT: {
+    root: {
       type: 'root',
       listensForUpdates: true,
     },
-    NUMBER: {
+    number: {
       type: 'number',
       listensForUpdates: false,
     },
-    FACTORY: {
+    factory: {
       type: 'factory',
       listensForUpdates: true,
     },

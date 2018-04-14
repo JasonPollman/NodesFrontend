@@ -20,7 +20,7 @@ import {
 } from '../../../../constants';
 
 const generateRandomNodes = (parent, { min, max, count }) => (
-  _.times(count, () => ({ type: NODE_TYPES.NUMBER.type, value: _.random(min, max), parent }))
+  _.times(count, () => ({ type: NODE_TYPES.number.type, value: _.random(min, max), parent }))
 );
 
 /**

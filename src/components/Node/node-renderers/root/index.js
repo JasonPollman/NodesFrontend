@@ -47,7 +47,7 @@ export default class RootNode extends React.Component {
         {
           value: name,
           parent: this.props.id,
-          type: NODE_TYPES.FACTORY.type,
+          type: NODE_TYPES.factory.type,
         },
       ],
       SOCKET_SUMMARIES.factoryNodeAdded(name),
