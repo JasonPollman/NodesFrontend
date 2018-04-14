@@ -121,8 +121,8 @@ export default class FactoryForm extends React.Component {
           onValueChange={_.partial(this.handleNumericChangeForStateKey, 'count')}
         />
         <Button
-          icon="add"
           type="submit"
+          className="pt-fill"
           text="Generate Numbers"
           intent={Intent.PRIMARY}
           disabled={Boolean(this.state.error)}
