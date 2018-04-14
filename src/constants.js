@@ -29,15 +29,15 @@ export default Object.assign(exports, Object.freeze({
   NODE_TYPES: {
     ROOT: {
       type: 'root',
-      listensForUpdates: false,
+      listensForUpdates: true,
     },
     NUMBER: {
       type: 'number',
-      listensForUpdates: true,
+      listensForUpdates: false,
     },
     FACTORY: {
       type: 'factory',
-      listensForUpdates: false,
+      listensForUpdates: true,
     },
   },
   // The maximum number of number nodes a factory can generate
