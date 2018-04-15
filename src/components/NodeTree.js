@@ -114,7 +114,7 @@ export default class NodeTree extends React.Component {
    * @memberof NodeTree
    */
   handleSocketUpdate = (root) => {
-    log('Root node fetched...');
+    log('Root node fetched...', root);
     this.setState({ root });
   }
 
