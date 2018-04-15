@@ -31,6 +31,7 @@ const iterateeKeyForNode = ({ id, type, value }) => `${id}-${type}-${value}`;
 export default class Node extends React.Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
+    initID: PropTypes.number.isRequired,
     toast: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
   }
@@ -55,6 +56,19 @@ export default class Node extends React.Component {
   componentDidMount() {
     if (_.get(NODE_TYPES, `${this.props.type}.listensForUpdates`, true)) {
       websockets.on(this.key, this.handleSocketUpdate);
+    }
+  }
+
+  /**
+   * Mapping state to props is an anti-pattern, but it's useful
+   * here since we're taking the top level of the tree and rendering it down,
+   * then only listening for updates to a single node. Handling this with
+   * `initID` for re-connect scenarios so child updates re-render.
+   * @param {object} nextProps The next props.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.initID !== this.props.initID) {
+      this.setState({ ...nextProps });
     }
   }
 
@@ -101,7 +115,14 @@ export default class Node extends React.Component {
         {
           _.map(
             this.state.children,
-            child => <Node toast={this.props.toast} key={iterateeKeyForNode(child)} {...child} />,
+            child => (
+              <Node
+                initID={this.props.initID}
+                toast={this.props.toast}
+                key={iterateeKeyForNode(child)}
+                {...child}
+              />
+            ),
           )
         }
       </Renderer>

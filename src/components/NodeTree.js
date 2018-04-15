@@ -46,6 +46,16 @@ export default class NodeTree extends React.Component {
     className: '',
   }
 
+  /**
+   * Creates an instance of NodeTree.
+   * @param {object} props React props
+   * @memberof NodeTree
+   */
+  constructor(props) {
+    super(props);
+    this.initID = 0;
+  }
+
   state = {
     root: null,
     isConnected: true,
@@ -115,6 +125,7 @@ export default class NodeTree extends React.Component {
    */
   handleSocketUpdate = (root) => {
     log('Root node fetched...', root);
+    this.initID++;
     this.setState({ root });
   }
 
@@ -178,7 +189,7 @@ export default class NodeTree extends React.Component {
           {
             this.state.isConnected
               && this.state.root
-              && <Node toast={this.toast} {...this.state.root} />
+              && <Node initID={this.initID} toast={this.toast} {...this.state.root} />
           }
           {
             !this.state.isConnected && (
