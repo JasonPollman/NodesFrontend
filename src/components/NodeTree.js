@@ -6,13 +6,16 @@
 
 import _ from 'lodash';
 import React from 'react';
+import debug from 'debug';
 import PropTypes from 'prop-types';
 
 import {
   Toast,
   Intent,
   Toaster,
+  Spinner,
   Position,
+  NonIdealState,
 } from '@blueprintjs/core';
 
 import Node from './Node';
@@ -23,7 +26,7 @@ import {
   EVENT_NAME_TO_PRETTY_MAPPING,
 } from '../constants';
 
-
+const log = debug('NodeNumberFactory:NodeTree');
 let toastIDs = 0;
 
 /**
@@ -45,6 +48,7 @@ export default class NodeTree extends React.Component {
 
   state = {
     root: null,
+    isConnected: true,
     toasts: [],
   };
 
@@ -55,8 +59,15 @@ export default class NodeTree extends React.Component {
    * @memberof Node
    */
   componentWillMount() {
-    websockets.on(SOCKET_EVENTS.ERROR, this.handleSocketNodeError);
     websockets.on(SOCKET_EVENTS.INIT, this.handleSocketUpdate);
+    websockets.on(SOCKET_EVENTS.ERROR, this.handleSocketNodeError);
+
+    // Handle socket connection issues
+    // These are built in socket.io events.
+    websockets.on('reconnect', this.setSocketConnected);
+    websockets.on('disconnected', this.setSocketDisconnected);
+    websockets.on('connect_error', this.setSocketDisconnected);
+
     websockets.emit(SOCKET_EVENTS.INIT);
   }
 
@@ -68,6 +79,33 @@ export default class NodeTree extends React.Component {
    */
   componentWillUnmount() {
     websockets.removeListener(SOCKET_EVENTS.INIT, this.handleSocketUpdate);
+    websockets.removeListener(SOCKET_EVENTS.ERROR, this.handleSocketNodeError);
+
+    websockets.removeListener('reconnect', this.setSocketConnected);
+    websockets.removeListener('disconnected', this.setSocketDisconnected);
+    websockets.removeListener('connect_error', this.setSocketDisconnected);
+  }
+
+  /**
+   * Sets the connection state to `true`.
+   * @memberof NodeTree
+   */
+  setSocketConnected = () => {
+    log('Socket state changed to "connected"');
+
+    // Re-emit the init event to get any tree updates
+    // the occurred while the connection was lost.
+    websockets.emit(SOCKET_EVENTS.INIT);
+    this.setState({ isConnected: true });
+  }
+
+  /**
+   * Sets the connection state to `false`.
+   * @memberof NodeTree
+   */
+  setSocketDisconnected = () => {
+    log('Socket state changed to "disconnected"');
+    this.setState({ isConnected: false });
   }
 
   /**
@@ -76,6 +114,7 @@ export default class NodeTree extends React.Component {
    * @memberof NodeTree
    */
   handleSocketUpdate = (root) => {
+    log('Root node fetched...');
     this.setState({ root });
   }
 
@@ -137,7 +176,16 @@ export default class NodeTree extends React.Component {
         </Toaster>
         <div className="padding-20 min-width-300">
           {
-            this.state.root && <Node toast={this.toast} {...this.state.root} />
+            this.state.isConnected
+              && this.state.root
+              && <Node toast={this.toast} {...this.state.root} />
+          }
+          {
+            !this.state.isConnected && (
+              <NonIdealState className="margin-top-30" title="Connecting...">
+                <Spinner />
+              </NonIdealState>
+            )
           }
         </div>
       </div>

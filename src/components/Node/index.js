@@ -18,7 +18,7 @@ import {
   SOCKET_EVENTS,
 } from '../../constants';
 
-const log = debug('NodeFactory');
+const log = debug('NodeNumberFactory:Node');
 const iterateeKeyForNode = ({ id, type, value }) => `${id}-${type}-${value}`;
 
 /**
